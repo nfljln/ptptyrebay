@@ -14,6 +14,11 @@
 
 import streamlit as st
 from streamlit.logger import get_logger
+from flask import Flask, render_template
+from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
+from azure.kusto.data.exceptions import KustoServiceError
+from azure.kusto.data.helpers import dataframe_from_result_table
+import pandas as pd
 
 LOGGER = get_logger(__name__)
 
@@ -24,7 +29,7 @@ def run():
         page_icon="👋",
     )
 
-    st.write("# Welcome to Streamlit! 👋")
+    st.write("# Welcome to PTP Tyre Bay! 👋")
 
     st.sidebar.success("Select a demo above.")
 
