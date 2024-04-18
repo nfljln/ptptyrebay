@@ -39,6 +39,25 @@ def run():
     """
     )
 
+# URL AND DB NAME
+CLUSTER_URL = "https://tyrebaycluster.southeastasia.kusto.windows.net"
+KUSTO_DATABASE = "TyreBayDB"
+
+# REDIRECT TO LOGIN PAGE
+try:
+    KCSB = KustoConnectionStringBuilder.with_interactive_login(CLUSTER_URL)
+    KUSTO_CLIENT = KustoClient(KCSB)
+except KustoServiceError as e:
+    print("Error connecting to Azure Data Explorer:", e)
+
+# KQL QUERY
+KUSTO_QUERY = "tyrebaytable | take 10"
+try:
+    RESPONSE = KUSTO_CLIENT.execute(KUSTO_DATABASE, KUSTO_QUERY)
+    df = dataframe_from_result_table(RESPONSE.primary_results[0])
+except KustoServiceError as e:
+    print("Error executing Kusto query:", e)
+    df = pd.DataFrame()  # Empty DataFrame in case of error
 
 if __name__ == "__main__":
     run()
